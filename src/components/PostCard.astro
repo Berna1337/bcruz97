@@ -1,0 +1,14 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+interface Props { post: CollectionEntry<'blog'>; }
+const { post } = Astro.props;
+---
+<a class="post-entry" href={`/blog/${post.id}/`} data-post data-search={`${post.data.title} ${post.data.description}`.toLowerCase()}>
+  <div class="entry-date mono"><FormattedDate date={post.data.pubDate} /></div>
+  <div class="entry-copy">
+    <h3>{post.data.title}</h3>
+    <p>{post.data.description}</p>
+    <span class="entry-details">{post.data.readingTime} min read</span>
+  </div>
+</a>

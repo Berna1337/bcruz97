@@ -1,64 +1,48 @@
-# Astro Starter Kit: Blog
+# bcruz97 — Bernardo Cruz
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/astro-blog-starter-template)
+Bernardo Cruz’s personal blog. Built with Astro, with the supplied logo, responsive layouts, search, and an RSS feed.
 
-![Astro Template Preview](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+## Run locally
 
-<!-- dash-content-start -->
-
-Create a blog with Astro and deploy it on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
-
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-- ✅ Built-in Observability logging
-
-<!-- dash-content-end -->
-
-## Getting Started
-
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
-
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-starter-template
+```sh
+npm install
+npm run dev
 ```
 
-A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
+If your computer reaches its file watcher limit, use `CHOKIDAR_USEPOLLING=true npm run dev`.
 
-## 🚀 Project Structure
+## Write a post
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Add a Markdown file in `src/content/blog/`, for example `my-first-story.md`:
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```md
+---
+title: "My first story"
+description: "A short introduction to this entry."
+pubDate: "2026-11-01"
+readingTime: 3
+draft: false
+---
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+Your story starts here.
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+Set `draft: true` to hide a post from the site, direct article routes, and RSS. Home shows the three latest entries.
 
-## 🧞 Commands
+## Personalize
 
-All commands are run from the root of the project, from a terminal:
+- Home: `src/pages/index.astro`
+- About: `src/pages/about.astro`
+- Site title and description: `src/consts.ts`
+- Colors, typography, and responsive layouts: `src/styles/global.css`
+- Logo: `public/logo.png`
+- Canonical site URL and sitemap: `astro.config.mjs` (update when connecting a custom domain)
 
-| Command                           | Action                                           |
-| :-------------------------------- | :----------------------------------------------- |
-| `npm install`                     | Installs dependencies                            |
-| `npm run dev`                     | Starts local dev server at `localhost:4321`      |
-| `npm run build`                   | Build your production site to `./dist/`          |
-| `npm run preview`                 | Preview your build locally, before deploying     |
-| `npm run astro ...`               | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help`         | Get help using the Astro CLI                     |
-| `npm run build && npm run deploy` | Deploy your production site to Cloudflare        |
-| `npm wrangler tail`               | View real-time logs for all Workers              |
+## Verify and publish
 
-## 👀 Want to learn more?
+```sh
+npm run build
+npx tsc --noEmit
+```
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+The existing Cloudflare setup is retained. `npm run check` also performs a Cloudflare deployment dry run; `npm run deploy` publishes to the configured Cloudflare account. Sites publication uses the project identity in `.openai/hosting.json` and the Sites source workflow. All current pages are prerendered, so Sites hosts the generated `dist` assets.
