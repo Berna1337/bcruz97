@@ -2,7 +2,7 @@
 title: Hello, readers.
 description: Why I’m starting this blog, and what might end up here.
 pubDate: 2026-11-01
-draft: true
+draft: false
 ---
 I have a habit of getting interested in something, looking into it for what I think will be five minutes, and coming back hours later with far too much to say about it.
 
