@@ -67,9 +67,9 @@ content:
         description: Optional. Pick an existing category, or add one under Categories first.
         options:
           collection: categories
-          value: "{primary}"
-          label: "{primary}"
-          search: name
+          value: "{fields.name}"
+          label: "{fields.name}"
+          search: fields.name
 
       - name: pubDate
         label: Post date
