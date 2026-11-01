@@ -3,7 +3,6 @@ title: A small experiment
 description: Testing this blog before the first real post.
 category: Development
 pubDate: 2026-11-01
-heroImage: /logo.png
 heroImageAlt: The glowing silver bcruz97 emblem on a black background.
 draft: true
 ---
