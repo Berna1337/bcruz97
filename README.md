@@ -29,6 +29,36 @@ Your story starts here.
 
 Set `draft: true` to hide a post from the site, direct article routes, and RSS. Home shows the three latest entries.
 
+## Private draft previews
+
+Drafts have a password-protected preview area at `https://bcruz97.com/preview/`. It uses the same article layout and YouTube embeds as public posts.
+
+### One-time setup
+
+Set a unique password of at least 16 characters using Cloudflare’s secret prompt (do not put it in Git or paste it into chat):
+
+```sh
+npx wrangler secret put PREVIEW_PASSWORD
+npm run deploy
+```
+
+The password stays in Cloudflare. Changing it signs out existing sessions. Preview pages remain unavailable if the password is missing or shorter than 16 characters. Sign-in attempts are throttled using a Workers rate limiting binding.
+
+### From your phone
+
+1. Save the post in Pages CMS with **Draft** enabled.
+2. Wait for the connected Cloudflare build to finish successfully. Without Git auto-deployment, deploy the latest repository changes manually.
+3. Open `/preview/`, sign in, and select the draft.
+4. After reviewing it, turn **Draft** off in Pages CMS and save. The next successful deployment publishes it.
+
+The browser remembers the preview sign-in for seven days. You can sign out on the draft list. Draft text is excluded from public blog routes, RSS, and the sitemap. Preview responses are never cached and are marked `noindex`.
+
+This protects the preview pages, not the source repository: drafts saved to a public GitHub repository are still publicly readable there. Uploaded files in `public/images` also have public URLs. Use a private repository for confidential drafts.
+
+### Local preview development
+
+Create an ignored `.dev.vars` file containing `PREVIEW_PASSWORD="your-long-local-test-password"`. Then run `npm run preview` to test the built Worker locally. Do not commit that file. `npx wrangler types` regenerates the rate limiting binding types when the Worker configuration changes.
+
 ## YouTube videos
 
 In Pages CMS, put a YouTube link in its own paragraph, with a blank line before and after it:
@@ -61,4 +91,4 @@ npm run build
 npx tsc --noEmit
 ```
 
-The existing Cloudflare setup is retained. `npm run check` also performs a Cloudflare deployment dry run; `npm run deploy` publishes to the configured Cloudflare account. Sites publication uses the project identity in `.openai/hosting.json` and the Sites source workflow. All current pages are prerendered, so Sites hosts the generated `dist` assets.
+The existing Cloudflare setup is retained. `npm run check` also performs a Cloudflare deployment dry run; `npm run deploy` publishes to the configured Cloudflare account. Sites publication uses the project identity in `.openai/hosting.json` and the Sites source workflow. Public pages are prerendered. Private preview routes require the Cloudflare Worker at runtime and must not be published as a static-only export.

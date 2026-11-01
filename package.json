@@ -34,7 +34,7 @@
     "check": "astro build && tsc && wrangler deploy --dry-run",
     "deploy": "astro build && wrangler deploy",
     "dev": "astro dev",
-    "preview": "astro build && wrangler dev"
+    "preview": "astro build && wrangler dev --infer-origin-from-routes=false"
   },
   "type": "module"
 }

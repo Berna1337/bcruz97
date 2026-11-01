@@ -2,9 +2,19 @@ import { glob } from "astro/loaders";
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 
+const blogFiles = glob({ base: "./src/content/blog", pattern: "**/*.{md,mdx}" });
+
 const blog = defineCollection({
 	// Load Markdown and MDX files in the `src/content/blog/` directory.
-	loader: glob({ base: "./src/content/blog", pattern: "**/*.{md,mdx}" }),
+	loader: {
+        ...blogFiles,
+        async load(context) {
+            // Astro 5's glob loader returns early for an empty folder. Clear old
+            // entries first so deleting the last post also removes cached drafts.
+            context.store.clear();
+            await blogFiles.load(context);
+        },
+    },
 	// Type-check frontmatter using a schema
 	schema: z.object({
 		title: z.string(),

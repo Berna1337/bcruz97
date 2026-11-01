@@ -13,6 +13,9 @@
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
+	"ratelimits": [
+		{ "name": "PREVIEW_LOGIN_LIMITER", "namespace_id": "9701", "simple": { "limit": 5, "period": 60 } }
+	],
 	"main": "./dist/_worker.js/index.js",
 	"assets": {
 		"directory": "./dist",

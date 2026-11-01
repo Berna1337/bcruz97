@@ -9,7 +9,7 @@ import cloudflare from "@astrojs/cloudflare";
 // https://astro.build/config
 export default defineConfig({
 	site: "https://bcruz97.com",
-	integrations: [mdx(), sitemap()],
+	integrations: [mdx(), sitemap({ filter: page => !new URL(page).pathname.startsWith("/preview") })],
 	markdown: { rehypePlugins: [rehypeYouTube] },
 	adapter: cloudflare({
 		platformProxy: {

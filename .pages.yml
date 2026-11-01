@@ -49,7 +49,7 @@ content:
         label: Draft
         type: boolean
         default: true
-        description: Keep enabled while writing. Turn off when the post is ready to publish.
+        description: Keep enabled while writing. Preview after saving at https://bcruz97.com/preview/ — turn off when ready to publish.
 
       - name: body
         label: Post
