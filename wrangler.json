@@ -5,6 +5,10 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "bcruz97",
+	"workers_dev": false,
+	"routes": [
+		{ "pattern": "bcruz97.com", "custom_domain": true }
+	],
 	"compatibility_date": "2025-10-08",
 	"compatibility_flags": [
 		"nodejs_compat"
