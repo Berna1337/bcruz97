@@ -29,6 +29,22 @@ Your story starts here.
 
 Set `draft: true` to hide a post from the site, direct article routes, and RSS. Home shows the three latest entries.
 
+## YouTube videos
+
+In Pages CMS, put a YouTube link in its own paragraph, with a blank line before and after it:
+
+```md
+Here is the video I’m talking about:
+
+https://www.youtube.com/watch?v=M7lc1UVf-VE
+
+And here are my thoughts on it.
+```
+
+The blog turns the standalone link into a responsive video player. Regular watch links, `youtu.be` share links, Shorts, and live video links work. Shared timestamps are preserved. You can add several videos in one post. Links inside sentences stay as ordinary links.
+
+Pages CMS may show a link rather than the player while editing; the video player appears on the blog after building. No video upload or API key is needed. Some videos have embedding disabled by their owner; the “Watch on YouTube” link remains available.
+
 ## Personalize
 
 - Home: `src/pages/index.astro`

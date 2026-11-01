@@ -272,3 +272,19 @@ h1, h2, h3 { font-weight: 400; line-height: 1.25; }
   .header-actions { gap: 0; }
   .theme-toggle { width: 30px; height: 30px; }
 }
+
+.video-embed { margin: 2em 0; }
+.video-embed iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 200px;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  background: #000000;
+}
+.video-embed figcaption {
+  margin-top: 9px;
+  color: var(--muted);
+  font: 12px/1.6 Atkinson, Arial, sans-serif;
+}

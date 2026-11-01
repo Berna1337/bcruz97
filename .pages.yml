@@ -1,0 +1,61 @@
+media:
+  input: public/images
+  output: /images
+  categories: [image]
+  rename: safe
+
+content:
+  - name: posts
+    label: Blog posts
+    type: collection
+    path: src/content/blog
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: title
+      fields: [title, pubDate, draft]
+      sort: [pubDate, title]
+      search: [title, description]
+      default:
+        sort: pubDate
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+
+      - name: description
+        label: Short description
+        type: text
+        required: true
+        description: A short summary shown in the post list and sharing previews.
+
+      - name: pubDate
+        label: Post date
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+
+      - name: readingTime
+        label: Reading time (minutes)
+        type: number
+        default: 2
+        options:
+          min: 1
+
+      - name: draft
+        label: Draft
+        type: boolean
+        default: true
+        description: Keep enabled while writing. Turn off when the post is ready to publish.
+
+      - name: body
+        label: Post
+        description: Put a YouTube link on its own line to embed the video on the blog.
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          switcher: true
