@@ -1,0 +1,26 @@
+---
+title: A small experiment
+description: Testing this blog before the first real post.
+pubDate: 2026-11-01
+readingTime: 1
+draft: true
+---
+This is a test post. Nothing profound—just checking that everything works.
+
+## A few unrelated thoughts
+
+- A good soundtrack can make an ordinary task feel like a side quest.
+- Fixing a tiny bug sometimes feels better than finishing a big feature.
+- “I’ll look into this for five minutes” is how most rabbit holes begin.
+
+## A formatting check
+
+This sentence has **bold text**, *italic text*, and a [link to the homepage](https://bcruz97.com/).
+
+> A temporary home for a few unfinished thoughts.
+
+## A video
+
+[https://www.youtube.com/watch?v=M7lc1UVf-VE](https://www.youtube.com/watch?v=M7lc1UVf-VE)
+
+If the video appears as a player in the preview, that part works too.
