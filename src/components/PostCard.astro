@@ -1,15 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import FormattedDate from './FormattedDate.astro';
-interface Props { post: CollectionEntry<'blog'>; }
-const { post } = Astro.props;
+interface Props { post: CollectionEntry<'blog'>; href?: string; }
+const { post, href = `/blog/${Astro.props.post.id}/` } = Astro.props;
 ---
-<a class="post-entry" href={`/blog/${post.id}/`} data-post data-search={`${post.data.title} ${post.data.description}`.toLowerCase()}>
-  <div class="entry-date mono"><FormattedDate date={post.data.pubDate} /></div>
+<a class:list={["post-entry", { "has-thumbnail": !!post.data.heroImage }]} href={href} data-post data-category={post.data.category?.toLowerCase() || ""} data-search={`${post.data.title} ${post.data.description} ${post.data.category || ""}`.toLowerCase()}>
+  <div class="entry-date mono"><FormattedDate date={post.data.pubDate} />{post.data.category && <span>{post.data.category}</span>}</div>
   <div class="entry-copy">
-    {post.data.heroImage && <img class="entry-thumbnail" src={post.data.heroImage} alt="" width="104" height="104" loading="lazy" />}
     <h3>{post.data.title}</h3>
     <p>{post.data.description}</p>
     <span class="entry-details">{post.data.readingTime} min read</span>
   </div>
+{post.data.heroImage && <img class="entry-thumbnail" src={post.data.heroImage} alt="" width="104" height="104" loading="lazy" />}
 </a>

@@ -29,6 +29,12 @@ Your story starts here.
 
 Set `draft: true` to hide a post from the site, direct article routes, and RSS. Home shows the three latest entries.
 
+## Categories
+
+The optional **Category** field in Pages CMS groups related posts, such as `Gaming`, `Food`, or `Development`. You can enter any category; use consistent names for related posts. Leave it blank for an uncategorized post.
+
+Categories appear beside each post and as filters on the Blog page once posts are published. Filters and text search work together. Click a category on an article to see related writing, or share a filtered URL such as `/blog/?category=Gaming`. Draft-only categories stay out of the public filters.
+
 ## Private draft previews
 
 Drafts have a password-protected preview area at `https://bcruz97.com/preview/`. It uses the same article layout and YouTube embeds as public posts.

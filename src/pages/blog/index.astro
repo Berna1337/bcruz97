@@ -5,6 +5,9 @@ import Footer from '../../components/Footer.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a,b) => b.data.pubDate.valueOf()-a.data.pubDate.valueOf());
+const categories = Array.from(new Map(
+  posts.filter(post => post.data.category).map(post => [post.data.category!.toLowerCase(), post.data.category!]),
+)).sort((a,b) => a[1].localeCompare(b[1]));
 ---
 <!doctype html>
 <html lang="en">
@@ -19,29 +22,57 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a,b
       <div class="notebook-content blog-page">
         <h1>All posts</h1>
         <div class="blog-tools" hidden={posts.length === 0}>
+          <div id="category-filters" class="filters" role="group" aria-label="Filter posts by category" hidden>
+            <button type="button" data-category-filter="" aria-pressed="true">All</button>
+            {categories.map(([key,label]) => <button type="button" data-category-filter={key} aria-pressed="false">{label}</button>)}
+          </div>
           <label class="search"><span class="sr-only">Search blog</span><input id="post-search" type="search" placeholder="Search posts…" /></label>
         </div>
         <p id="post-count" class="sr-only" aria-live="polite"></p>
         <div class="entry-list">{posts.map(post => <PostCard post={post} />)}</div>
-        <p id="empty-state" class="empty-state" hidden={posts.length > 0}>{posts.length === 0 ? "No posts yet." : "No posts found. Try another search."}</p>
+        <p id="empty-state" class="empty-state" hidden={posts.length > 0}>{posts.length === 0 ? "No posts yet." : "No posts found. Try another search or category."}</p>
       </div>
     </main>
     <Footer />
     <script>
       const search = document.querySelector<HTMLInputElement>('#post-search');
-      search?.addEventListener('input', () => {
-        const query = search.value.trim().toLowerCase();
+      const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category-filter]'));
+      const posts = Array.from(document.querySelectorAll<HTMLElement>('[data-post]'));
+      const filters = document.querySelector<HTMLElement>('#category-filters');
+      if (filters) filters.hidden = buttons.length < 2;
+      let selected = '';
+
+      function filterPosts() {
+        const query = search?.value.trim().toLowerCase() || '';
         let count = 0;
-        document.querySelectorAll<HTMLElement>('[data-post]').forEach(post => {
-          const visible = (post.dataset.search ?? '').includes(query);
+        posts.forEach(post => {
+          const visible = (!selected || post.dataset.category === selected) && (post.dataset.search || '').includes(query);
           post.hidden = !visible;
           if (visible) count++;
         });
+        buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.categoryFilter === selected)));
         const empty = document.querySelector<HTMLElement>('#empty-state');
         if (empty) empty.hidden = count > 0;
         const status = document.querySelector('#post-count');
         if (status) status.textContent = `${count} ${count === 1 ? 'post' : 'posts'} found`;
-      });
+      }
+
+      function readCategory() {
+        const key = new URLSearchParams(window.location.search).get('category')?.trim().toLowerCase() || '';
+        selected = buttons.some(button => button.dataset.categoryFilter === key) ? key : '';
+        filterPosts();
+      }
+      buttons.forEach(button => button.addEventListener('click', () => {
+        selected = button.dataset.categoryFilter || '';
+        const url = new URL(window.location.href);
+        if (selected) url.searchParams.set('category', button.textContent?.trim() || selected);
+        else url.searchParams.delete('category');
+        window.history.pushState(null, '', url);
+        filterPosts();
+      }));
+      search?.addEventListener('input', filterPosts);
+      window.addEventListener('popstate', readCategory);
+      readCategory();
     </script>
   </body>
 </html>

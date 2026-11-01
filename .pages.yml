@@ -21,9 +21,9 @@ content:
     filename: "{primary}.md"
     view:
       primary: title
-      fields: [title, pubDate, draft]
+      fields: [title, category, pubDate, draft]
       sort: [pubDate, title]
-      search: [title, description]
+      search: [title, description, category]
       default:
         sort: pubDate
         order: desc
@@ -38,6 +38,11 @@ content:
         type: text
         required: true
         description: A short summary shown in the post list and sharing previews.
+
+      - name: category
+        label: Category
+        type: string
+        description: Optional, such as Gaming, Food, or Development. Use the same name for related posts.
 
       - name: pubDate
         label: Post date
