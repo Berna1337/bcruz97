@@ -24,7 +24,7 @@ const posts = (await getCollection('blog', ({ data }) => (import.meta.env.PUBLIC
           <p>This is my personal blog. I share things I’ve worked on, things I’ve learned, and whatever else I feel like writing about.</p>
         </section>
         <section aria-labelledby="recent-writing">
-          <div class="writing-heading"><h2 id="recent-writing">Recent writing</h2><a class="underlined" href="/blog/">All posts</a></div>
+          <div class="writing-heading"><h2 id="recent-writing">Recent posts</h2><a class="underlined" href="/blog/">All posts</a></div>
           <div class="entry-list">{posts.length > 0 ? posts.map(post => <PostCard post={post} />) : <p class="empty-state">No posts yet.</p>}</div>
         </section>
       </div>
