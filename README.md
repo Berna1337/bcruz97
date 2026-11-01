@@ -59,6 +59,14 @@ This protects the preview pages, not the source repository: drafts saved to a pu
 
 Create an ignored `.dev.vars` file containing `PREVIEW_PASSWORD="your-long-local-test-password"`. Then run `npm run preview` to test the built Worker locally. Do not commit that file. `npx wrangler types` regenerates the rate limiting binding types when the Worker configuration changes.
 
+## Thumbnails, images, and audio
+
+Pages CMS has a **Post thumbnail** upload field and a **Thumbnail description** for accessible image text. The thumbnail appears in the post header, post lists, and sharing previews. Leave it empty for a text-only post. Use the body editor’s image control to add images within the writing.
+
+The optional **Audio clip** field uploads MP3, M4A, OGG, or WAV files and adds an audio player above the post body, with playback controls and a download link. It never autoplays. Images are stored in `public/images`; audio is stored in `public/audio`.
+
+The draft `a-small-experiment.md` tests these features with the site logo and a generated three-second test sound. It stays a draft. Uploaded media files have public URLs, even when the post itself is a draft.
+
 ## YouTube videos
 
 In Pages CMS, put a YouTube link in its own paragraph, with a blank line before and after it:

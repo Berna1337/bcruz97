@@ -4,6 +4,9 @@ description: Testing this blog before the first real post.
 pubDate: 2026-11-01
 readingTime: 1
 draft: true
+heroImage: /logo.png
+heroImageAlt: The glowing silver bcruz97 emblem on a black background.
+audioFile: /audio/test-tone.wav
 ---
 This is a test post. Nothing profound—just checking that everything works.
 
@@ -24,3 +27,15 @@ This sentence has **bold text**, *italic text*, and a [link to the homepage](htt
 [https://www.youtube.com/watch?v=M7lc1UVf-VE](https://www.youtube.com/watch?v=M7lc1UVf-VE)
 
 If the video appears as a player in the preview, that part works too.
+
+## An image
+
+![The glowing silver bcruz97 emblem on a black background.](/logo.png)
+
+The image above should fit the page without overflowing on a phone. The same logo is also set as this post’s thumbnail, so it should appear above the article and beside this draft in the preview list.
+
+## An audio check
+
+There is a short test sound in the audio player near the top of this post. Press play to hear a few gentle notes, then try pause, seeking, and the volume controls. It should not play automatically.
+
+The download link should let you open the original audio file too.

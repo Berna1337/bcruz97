@@ -17,7 +17,7 @@ const drafts = (await getCollection('blog', ({ data }) => data.draft)).sort((a,b
       <h1>Your drafts</h1>
       <p class="page-intro">Save in Pages CMS, then check it here after the site finishes updating.</p>
       <div class="entry-list preview-drafts">
-        {drafts.map(post => <a class="post-entry" href={`/preview/${post.id}/`}><div class="entry-date mono"><FormattedDate date={post.data.pubDate} /></div><div class="entry-copy"><h3>{post.data.title}</h3><p>{post.data.description}</p></div></a>)}
+        {drafts.map(post => <a class="post-entry" href={`/preview/${post.id}/`}><div class="entry-date mono"><FormattedDate date={post.data.pubDate} /></div><div class="entry-copy">{post.data.heroImage && <img class="entry-thumbnail" src={post.data.heroImage} alt="" width="104" height="104" loading="lazy" />}<h3>{post.data.title}</h3><p>{post.data.description}</p></div></a>)}
         {drafts.length === 0 && <p class="empty-state">No drafts yet.</p>}
       </div>
     </main>

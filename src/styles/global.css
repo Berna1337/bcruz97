@@ -301,3 +301,16 @@ h1, h2, h3 { font-weight: 400; line-height: 1.25; }
 .preview-toolbar button { border: 0; background: transparent; color: var(--text); padding: 8px 0; text-decoration: underline; text-underline-offset: 4px; }
 .preview-drafts { margin-top: 30px; }
 .preview-notice { border-block: 1px solid var(--line); padding-block: 14px; margin-bottom: 28px; font-size: 12px; color: var(--muted); }
+
+.entry-thumbnail { float: right; width: 104px; height: 104px; object-fit: cover; margin: 3px 0 12px 22px; }
+.entry-copy::after { content: ''; display: table; clear: both; }
+.article-hero { margin: 30px 0; }
+.article-hero img { width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: var(--surface); }
+.article-audio { margin: 28px 0; padding: 18px 0; border-block: 1px solid var(--line); }
+.article-audio p { font-size: 14px; margin-bottom: 12px; }
+.article-audio audio { display: block; width: 100%; }
+.article-audio > a { display: inline-block; margin-top: 10px; font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
+.prose img { margin-block: 24px; }
+@media (max-width: 380px) {
+  .entry-thumbnail { width: 80px; height: 80px; margin-left: 15px; }
+}

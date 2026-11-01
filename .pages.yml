@@ -1,8 +1,16 @@
 media:
-  input: public/images
-  output: /images
-  categories: [image]
-  rename: safe
+  - name: images
+    label: Images
+    input: public/images
+    output: /images
+    categories: [image]
+    rename: safe
+  - name: audio
+    label: Audio
+    input: public/audio
+    output: /audio
+    extensions: [mp3, m4a, ogg, wav]
+    rename: safe
 
 content:
   - name: posts
@@ -38,6 +46,26 @@ content:
         options:
           format: yyyy-MM-dd
 
+      - name: heroImage
+        label: Post thumbnail
+        type: image
+        description: Optional image for the post header, blog list, and sharing previews.
+        options:
+          media: images
+
+      - name: heroImageAlt
+        label: Thumbnail description
+        type: string
+        description: Briefly describe the image for people using screen readers.
+
+      - name: audioFile
+        label: Audio clip
+        type: file
+        description: Optional audio player shown above the post. Supports MP3, M4A, OGG, and WAV.
+        options:
+          media: audio
+          extensions: [mp3, m4a, ogg, wav]
+
       - name: readingTime
         label: Reading time (minutes)
         type: number
@@ -58,4 +86,5 @@ content:
         required: true
         options:
           format: markdown
+          media: images
           switcher: true
