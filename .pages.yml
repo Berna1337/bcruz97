@@ -59,9 +59,9 @@ content:
         description: Briefly describe the image for people using screen readers.
 
       - name: audioFile
-        label: Audio clip
+        label: Audio clip above post
         type: file
-        description: Optional audio player shown above the post. Supports MP3, M4A, OGG, and WAV.
+        description: Optional player above the post. To place clips within the writing, upload them in Media → Audio and paste each URL in its own paragraph.
         options:
           media: audio
           extensions: [mp3, m4a, ogg, wav]
@@ -81,7 +81,7 @@ content:
 
       - name: body
         label: Post
-        description: Put a YouTube link on its own line to embed the video on the blog.
+        description: Insert images at the cursor with the image button. Put an audio, image, or YouTube link in its own paragraph to embed it on the blog.
         type: rich-text
         required: true
         options:

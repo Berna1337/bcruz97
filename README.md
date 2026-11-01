@@ -63,9 +63,27 @@ Create an ignored `.dev.vars` file containing `PREVIEW_PASSWORD="your-long-local
 
 Pages CMS has a **Post thumbnail** upload field and a **Thumbnail description** for accessible image text. The thumbnail appears in the post header, post lists, and sharing previews. Leave it empty for a text-only post. Use the body editor’s image control to add images within the writing.
 
-The optional **Audio clip** field uploads MP3, M4A, OGG, or WAV files and adds an audio player above the post body, with playback controls and a download link. It never autoplays. Images are stored in `public/images`; audio is stored in `public/audio`.
+The optional **Audio clip above post** field uploads MP3, M4A, OGG, or WAV files and adds a player above the writing. For clips anywhere in the body, upload them in **Media → Audio**, copy the public URL (such as `/audio/my-clip.mp3`), and paste it in its own paragraph. Each link becomes a player with controls and a download link. You can use several clips; none autoplay. Images are stored in `public/images`; audio is stored in `public/audio`.
 
 The draft `a-small-experiment.md` tests these features with the site logo and a generated three-second test sound. It stays a draft. Uploaded media files have public URLs, even when the post itself is a draft.
+
+### Place media between paragraphs
+
+In Pages CMS, put the cursor where the image belongs and use the image button. Add a description for the image. In Markdown source, the equivalent is:
+
+```md
+A paragraph before the image.
+
+![A description of the image](/images/my-image.jpg)
+
+A paragraph before an audio clip.
+
+[Listen to this clip](/audio/my-clip.mp3)
+
+A paragraph after the audio clip.
+```
+
+Standalone image URLs and audio URLs also embed automatically. Links within a sentence stay as ordinary links. MP3, M4A, OGG, and WAV audio files are supported, including HTTPS links. For inline audio, leave **Audio clip above post** empty to avoid a second player at the top. The rich-text editor may show the audio link; the player appears in the built blog and draft preview.
 
 ## YouTube videos
 

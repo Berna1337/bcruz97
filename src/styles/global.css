@@ -314,3 +314,8 @@ h1, h2, h3 { font-weight: 400; line-height: 1.25; }
 @media (max-width: 380px) {
   .entry-thumbnail { width: 80px; height: 80px; margin-left: 15px; }
 }
+
+.prose .audio-embed, .prose .image-embed { margin: 2em 0; }
+.prose .audio-embed audio { display: block; width: 100%; }
+.prose .audio-embed figcaption { margin-top: 9px; color: var(--muted); font: 12px/1.6 Atkinson, Arial, sans-serif; }
+.prose .image-embed img { width: 100%; height: auto; margin: 0; }

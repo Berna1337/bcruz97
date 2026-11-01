@@ -6,7 +6,6 @@ readingTime: 1
 draft: true
 heroImage: /logo.png
 heroImageAlt: The glowing silver bcruz97 emblem on a black background.
-audioFile: /audio/test-tone.wav
 ---
 This is a test post. Nothing profound—just checking that everything works.
 
@@ -36,6 +35,14 @@ The image above should fit the page without overflowing on a phone. The same log
 
 ## An audio check
 
-There is a short test sound in the audio player near the top of this post. Press play to hear a few gentle notes, then try pause, seeking, and the volume controls. It should not play automatically.
+Here is a short clip placed between paragraphs:
 
-The download link should let you open the original audio file too.
+[Test audio clip](/audio/test-tone.wav)
+
+This paragraph comes after the player. It should stay here, rather than moving the audio to the top of the post.
+
+Here is another player, using just the file URL on its own line:
+
+/audio/test-tone.wav
+
+Both clips should play only when you press play. The download links should open the original audio file.
