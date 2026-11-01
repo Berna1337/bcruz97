@@ -200,3 +200,8 @@ dist
 
 ### Astro ###
 .astro/
+
+# Generated preview and optimized media
+dist-preview/
+public/_media/
+src/generated/

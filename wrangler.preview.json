@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bcruz97-preview",
+  "main": "src/preview-worker.ts",
+  "compatibility_date": "2025-10-08",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist-preview",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "ratelimits": [
+    { "name": "PREVIEW_LOGIN_LIMITER", "namespace_id": "9702", "simple": { "limit": 5, "period": 60 } }
+  ]
+}

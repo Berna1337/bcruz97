@@ -4,7 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
-const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a,b) => b.data.pubDate.valueOf()-a.data.pubDate.valueOf());
+const posts = (await getCollection('blog', ({ data }) => (import.meta.env.PUBLIC_BLOG_PREVIEW === 'true' || !data.draft))).sort((a,b) => b.data.pubDate.valueOf()-a.data.pubDate.valueOf());
 const categories = Array.from(new Map(
   posts.filter(post => post.data.category).map(post => [post.data.category!.toLowerCase(), post.data.category!]),
 )).sort((a,b) => a[1].localeCompare(b[1]));

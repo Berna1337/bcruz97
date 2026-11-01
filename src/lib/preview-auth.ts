@@ -1,5 +1,4 @@
 const encoder = new TextEncoder();
-export const PREVIEW_COOKIE = 'bcruz97_preview';
 export const PREVIEW_SESSION_SECONDS = 60 * 60 * 24 * 7;
 
 export function previewConfigured(password: unknown): password is string {

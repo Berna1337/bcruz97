@@ -1,0 +1,48 @@
+name: Deploy private preview
+on:
+  push:
+    branches: [preview]
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: Pages CMS context (optional)
+        type: string
+        default: '{}'
+permissions:
+  contents: read
+concurrency:
+  group: deploy-private-preview
+  cancel-in-progress: true
+jobs:
+  preview:
+    if: github.ref == 'refs/heads/preview'
+    runs-on: ubuntu-latest
+    environment:
+      name: preview
+      url: https://bcruz97-preview.bcruz97.workers.dev
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      PREVIEW_PASSWORD: ${{ secrets.PREVIEW_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Check preview configuration
+        run: |
+          node --input-type=module -e '
+            for (const name of ["CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID", "PREVIEW_PASSWORD"]) {
+              if (!process.env[name]) throw new Error(`Set the ${name} GitHub secret first.`);
+            }
+            if (process.env.PREVIEW_PASSWORD.length < 16) throw new Error("The preview password needs at least 16 characters.");
+          '
+      - run: npm ci
+      - run: npm test
+      - run: npm run build:preview
+      - run: npx tsc --noEmit
+      - name: Deploy preview Worker (fails closed until password is set)
+        run: npx wrangler deploy --config wrangler.preview.json
+      - name: Set preview password
+        run: printf '%s' "$PREVIEW_PASSWORD" | npx wrangler secret put PREVIEW_PASSWORD --config wrangler.preview.json

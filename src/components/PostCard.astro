@@ -1,5 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { readingMinutes } from '../lib/publishing.mjs';
+import { imageAttributes } from '../lib/media';
 import FormattedDate from './FormattedDate.astro';
 interface Props { post: CollectionEntry<'blog'>; href?: string; }
 const { post, href = `/blog/${Astro.props.post.id}/` } = Astro.props;
@@ -9,7 +11,7 @@ const { post, href = `/blog/${Astro.props.post.id}/` } = Astro.props;
   <div class="entry-copy">
     <h3>{post.data.title}</h3>
     <p>{post.data.description}</p>
-    <span class="entry-details">{post.data.readingTime} min read</span>
+    <span class="entry-details">{import.meta.env.PUBLIC_BLOG_PREVIEW === 'true' && <>{post.data.draft ? "Draft" : "Published"} · </>}{readingMinutes(post.body)} min read</span>
   </div>
-{post.data.heroImage && <img class="entry-thumbnail" src={post.data.heroImage} alt="" width="104" height="104" loading="lazy" />}
+{post.data.heroImage && <img class="entry-thumbnail" {...imageAttributes(post.data.heroImage, true)} alt="" loading="lazy" />}
 </a>

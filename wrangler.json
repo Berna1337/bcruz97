@@ -6,15 +6,13 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "bcruz97",
 	"workers_dev": false,
+	"preview_urls": false,
 	"routes": [
 		{ "pattern": "bcruz97.com", "custom_domain": true }
 	],
 	"compatibility_date": "2025-10-08",
 	"compatibility_flags": [
 		"nodejs_compat"
-	],
-	"ratelimits": [
-		{ "name": "PREVIEW_LOGIN_LIMITER", "namespace_id": "9701", "simple": { "limit": 5, "period": 60 } }
 	],
 	"main": "./dist/_worker.js/index.js",
 	"assets": {

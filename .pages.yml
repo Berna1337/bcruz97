@@ -12,7 +12,29 @@ media:
     extensions: [mp3, m4a, ogg, wav]
     rename: safe
 
+  - name: videos
+    label: Video clips (under 25 MiB)
+    input: public/videos
+    output: /videos
+    extensions: [mp4, webm]
+    rename: safe
+
 content:
+  - name: categories
+    label: Categories
+    type: collection
+    path: src/content/categories
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: name
+      fields: [name]
+    fields:
+      - name: name
+        label: Name
+        type: string
+        required: true
+
   - name: posts
     label: Blog posts
     type: collection
@@ -41,8 +63,13 @@ content:
 
       - name: category
         label: Category
-        type: string
-        description: Optional, such as Gaming, Food, or Development. Use the same name for related posts.
+        type: reference
+        description: Optional. Pick an existing category, or add one under Categories first.
+        options:
+          collection: categories
+          value: "{primary}"
+          label: "{primary}"
+          search: name
 
       - name: pubDate
         label: Post date
@@ -71,25 +98,36 @@ content:
           media: audio
           extensions: [mp3, m4a, ogg, wav]
 
-      - name: readingTime
-        label: Reading time (minutes)
-        type: number
-        default: 2
-        options:
-          min: 1
-
       - name: draft
         label: Draft
         type: boolean
         default: true
-        description: Keep enabled while writing. Preview after saving at https://bcruz97.com/preview/ — turn off when ready to publish.
+        description: Keep enabled while writing. Save on the preview branch and check https://bcruz97-preview.bcruz97.workers.dev after the build. Turn off and merge to main to publish. Reading time is automatic.
 
       - name: body
         label: Post
-        description: Insert images at the cursor with the image button. Put an audio, image, or YouTube link in its own paragraph to embed it on the blog.
+        description: Insert images at the cursor with the image button. Put an audio, video clip, image, or YouTube link in its own paragraph to embed it on the blog.
         type: rich-text
         required: true
         options:
           format: markdown
           media: images
           switcher: true
+
+actions:
+  - name: rebuild-preview
+    label: Rebuild private preview
+    workflow: preview.yml
+    ref: current
+    confirm:
+      title: Rebuild preview?
+      message: Use this on the preview branch. Saving already triggers a build; this retries it.
+      button: Rebuild
+  - name: publish-pr
+    label: Open publishing pull request
+    workflow: publish-pr.yml
+    ref: current
+    confirm:
+      title: Ready to review?
+      message: Opens a pull request from preview to main. Review and merge it on GitHub to update the live blog.
+      button: Open pull request

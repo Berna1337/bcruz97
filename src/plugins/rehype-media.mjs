@@ -2,6 +2,7 @@
 /** @typedef {import('hast').Root | Element} Parent */
 
 const audioExtensions = /\.(?:mp3|m4a|ogg|wav)$/i;
+const videoExtensions = /\.(?:mp4|webm)$/i;
 const imageExtensions = /\.(?:png|jpe?g|webp|gif|avif|svg)$/i;
 
 function mediaKind(href) {
@@ -10,6 +11,7 @@ function mediaKind(href) {
   let url;
   try { url = new URL(href, 'https://bcruz97.com'); } catch { return null; }
   if (url.protocol !== 'https:') return null;
+  if (videoExtensions.test(url.pathname)) return 'video';
   if (audioExtensions.test(url.pathname)) return 'audio';
   if (imageExtensions.test(url.pathname)) return 'image';
   return null;
@@ -36,16 +38,16 @@ export default function rehypeMedia() {
           if (label === href) label = '';
           /** @type {Element} */
           const figure = { type: 'element', tagName: 'figure', properties: { className: [`${kind}-embed`] }, children: [] };
-          if (kind === 'audio') {
+          if (kind === 'audio' || kind === 'video') {
             figure.children = [
               {
-                type: 'element', tagName: 'audio',
-                properties: { src: href, controls: true, preload: 'none', 'aria-label': label || 'Audio clip' },
-                children: [{ type: 'text', value: 'Your browser cannot play this audio.' }],
+                type: 'element', tagName: kind,
+                properties: { src: href, controls: true, preload: 'none', ...(kind === 'video' ? { playsInline: true } : {}), 'aria-label': label || (kind === 'audio' ? 'Audio clip' : 'Video clip') },
+                children: [{ type: 'text', value: `Your browser cannot play this ${kind}.` }],
               },
               {
                 type: 'element', tagName: 'figcaption', properties: {},
-                children: [{ type: 'element', tagName: 'a', properties: { href }, children: [{ type: 'text', value: 'Download audio' }] }],
+                children: [{ type: 'element', tagName: 'a', properties: { href }, children: [{ type: 'text', value: `Download ${kind}` }] }],
               },
             ];
           } else {

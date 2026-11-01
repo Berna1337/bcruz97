@@ -4,6 +4,7 @@
 	"exclude": ["dist"],
 	"compilerOptions": {
 		"strictNullChecks": true,
+        "allowImportingTsExtensions": true,
 		"types": [
 			"./worker-configuration.d.ts",
 			"node"

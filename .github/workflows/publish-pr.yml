@@ -1,0 +1,30 @@
+name: Open publishing pull request
+on:
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: Pages CMS context (optional)
+        type: string
+        default: '{}'
+permissions:
+  contents: read
+  pull-requests: write
+concurrency:
+  group: publishing-pull-request
+  cancel-in-progress: false
+jobs:
+  pull-request:
+    if: github.ref == 'refs/heads/preview'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Open or reuse preview → main pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh pr list --head preview --base main --state open --json url --jq '.[0].url')
+          if [ -n "$existing" ]; then
+            echo "Publishing pull request: $existing" >> "$GITHUB_STEP_SUMMARY"
+          else
+            gh pr create --base main --head preview --title "Publish blog updates" --body "Review the private preview before merging. Posts with Draft enabled will stay unpublished. Merging updates the live blog through Cloudflare Builds." >> "$GITHUB_STEP_SUMMARY"
+          fi

@@ -291,19 +291,6 @@ h1, h2, h3 { font-weight: 400; line-height: 1.25; }
   font: 12px/1.6 Atkinson, Arial, sans-serif;
 }
 
-.preview-login { min-height: 65vh; padding-top: 30px; }
-.preview-login h1, .article-wrap > h1 { font: 400 36px/1.2 Georgia, serif; }
-.preview-login > p { color: var(--muted); margin-top: 18px; }
-.preview-form { display: grid; gap: 12px; max-width: 380px; margin-top: 30px; }
-.preview-form label { font-size: 14px; }
-.preview-form input { min-width: 0; padding: 12px; border: 1px solid var(--control-line); background: var(--surface); color: var(--text); border-radius: 0; }
-.preview-form button { padding: 11px 18px; border: 1px solid var(--accent); background: var(--accent); color: var(--bg); justify-self: start; }
-.preview-form p { color: var(--text); font-size: 14px; }
-.preview-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; color: var(--muted); font-size: 12px; margin-bottom: 30px; }
-.preview-toolbar button { border: 0; background: transparent; color: var(--text); padding: 8px 0; text-decoration: underline; text-underline-offset: 4px; }
-.preview-drafts { margin-top: 30px; }
-.preview-notice { border-block: 1px solid var(--line); padding-block: 14px; margin-bottom: 28px; font-size: 12px; color: var(--muted); }
-
 .post-entry.has-thumbnail { grid-template-columns: minmax(0, 1fr) 104px; }
 .entry-copy { grid-column: 1; min-width: 0; overflow-wrap: anywhere; }
 .entry-date { overflow-wrap: anywhere; }
@@ -334,3 +321,8 @@ h1, h2, h3 { font-weight: 400; line-height: 1.25; }
 
 .article-category { text-decoration: underline; text-underline-offset: 4px; }
 .article-category:hover { color: var(--text); }
+
+.preview-bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 16px; color: var(--muted); font-size: 12px; }
+.preview-bar form { margin: 0; }
+.preview-bar button { background: none; color: var(--text); border: 0; padding: 4px; font: inherit; text-decoration: underline; cursor: pointer; }
+.prose .video-embed video { display: block; width: 100%; height: auto; max-height: 75vh; background: #000; }

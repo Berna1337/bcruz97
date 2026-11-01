@@ -14,3 +14,4 @@ const links = [['/', 'Home'], ['/blog/', 'Blog'], ['/about/', 'About']];
     <a class="rss-link mono" href="/rss.xml">RSS <span aria-hidden="true">↗</span></a>
   </div>
 </header>
+{import.meta.env.PUBLIC_BLOG_PREVIEW === 'true' && <aside class="preview-bar wrap"><span>Private preview · Includes drafts</span><form method="post" action="/preview/logout/"><button>Sign out</button></form></aside>}
