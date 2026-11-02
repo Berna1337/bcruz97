@@ -19,7 +19,55 @@ media:
     extensions: [mp4, webm]
     rename: safe
 
+  - name: gallery-photos
+    label: Gallery photos
+    input: src/assets/gallery
+    output: /gallery
+    extensions: [jpg, jpeg, png, webp, avif]
+    rename: safe
+
 content:
+  - name: gallery
+    label: Gallery
+    type: file
+    path: src/data/gallery.json
+    format: json
+    fields:
+      - name: photos
+        label: Photos
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{index}. {fields.alt}"
+        description: Add photos and drag them into the order you want. Draft photos only appear in the private preview. Remove location metadata before uploading; the source repository is public.
+        fields:
+          - name: image
+            label: Photo
+            type: image
+            required: true
+            options:
+              media: gallery-photos
+          - name: alt
+            label: Photo description
+            type: string
+            required: true
+            description: Describe what is in the image for people using screen readers.
+          - name: caption
+            label: Caption
+            type: text
+            description: Optional, shown below the photo.
+          - name: date
+            label: Date taken
+            type: date
+            options:
+              format: yyyy-MM-dd
+          - name: draft
+            label: Draft
+            type: boolean
+            default: true
+            description: Keep enabled until the photo is ready to share publicly.
+
   - name: categories
     label: Categories
     type: collection

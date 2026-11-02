@@ -1,0 +1,104 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import gallery from '../data/gallery.json';
+import media from '../generated/media.json';
+import { parseGallery, visiblePhotos } from '../lib/gallery-data.mjs';
+const preview = import.meta.env.PUBLIC_BLOG_PREVIEW === 'true';
+type Variant = { src: string; width: number; height: number };
+const photos = visiblePhotos(parseGallery(gallery), preview).map(photo => {
+  const variants = (media as Record<string, Variant[]>)[photo.image];
+  if (!variants?.length) throw new Error(`Gallery photo was not processed: ${photo.image}. Run npm run build or npm run dev.`);
+  const thumbnail = variants.find(image => image.width >= 960) || variants[variants.length - 1];
+  return { ...photo, thumbnail, full: variants[variants.length - 1], srcset: variants.map(image => `${image.src} ${image.width}w`).join(', ') };
+});
+---
+<!doctype html>
+<html lang="en">
+  <head><BaseHead title="Gallery — bcruz97" description="Photos I felt like sharing." /></head>
+  <body>
+    <Header />
+    <main id="main" class="wrap gallery-page">
+      <div class="gallery-intro"><h1>Gallery.</h1><p>Photos I felt like sharing.</p></div>
+      <div class="gallery-heading mono"><span>{photos.length} {photos.length === 1 ? 'photo' : 'photos'}</span>{photos.length > 0 && <span>Open a photo for a closer look</span>}</div>
+      {photos.length === 0 ? <p class="empty-state gallery-empty">No photos yet. Check back soon.</p> : <div class="gallery-grid" data-gallery>
+        {photos.map(photo => <figure class="gallery-photo">
+          <a class="gallery-open" href={photo.full.src} aria-label={`View photo: ${photo.alt}`} data-gallery-photo data-alt={photo.alt} data-caption={photo.caption || ''} data-date={photo.date || ''} data-width={photo.full.width} data-height={photo.full.height}>
+            <img src={photo.thumbnail.src} srcset={photo.srcset} sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1000px) calc((100vw - 88px) / 2), 400px" width={photo.thumbnail.width} height={photo.thumbnail.height} alt={photo.alt} loading="lazy" decoding="async" />
+          </a>
+          {(photo.caption || photo.date || preview) && <figcaption>
+            {photo.caption && <p>{photo.caption}</p>}
+            <div class="gallery-photo-meta mono">{photo.date && <FormattedDate date={new Date(`${photo.date}T12:00:00Z`)} />}{preview && <span>{photo.draft ? 'Draft' : 'Published'}</span>}</div>
+          </figcaption>}
+        </figure>)}
+      </div>}
+    </main>
+    <dialog class="gallery-viewer" aria-labelledby="gallery-viewer-title" data-gallery-viewer>
+      <h2 id="gallery-viewer-title" class="sr-only">Photo viewer</h2>
+      <div class="gallery-viewer-top"><p class="mono" data-gallery-position aria-live="polite"></p><button type="button" class="gallery-control" data-gallery-close autofocus aria-label="Close photo viewer">Close <span aria-hidden="true">×</span></button></div>
+      <div class="gallery-viewer-image"><img alt="" data-gallery-image /><p class="gallery-image-error" data-gallery-error hidden role="alert">This photo couldn’t load. <a data-gallery-original>Open the image</a></p></div>
+      <div class="gallery-viewer-bottom"><button type="button" class="gallery-control" data-gallery-previous aria-label="Previous photo">← <span>Previous</span></button><div class="gallery-viewer-description"><p data-gallery-caption></p><p class="mono" data-gallery-date></p></div><button type="button" class="gallery-control" data-gallery-next aria-label="Next photo"><span>Next</span> →</button></div>
+    </dialog>
+    <Footer />
+    <script>
+      const viewer = document.querySelector<HTMLDialogElement>('[data-gallery-viewer]');
+      const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-gallery-photo]'));
+      if (viewer && links.length && typeof viewer.showModal === 'function') {
+        const image = viewer.querySelector<HTMLImageElement>('[data-gallery-image]')!;
+        const position = viewer.querySelector<HTMLElement>('[data-gallery-position]')!;
+        const caption = viewer.querySelector<HTMLElement>('[data-gallery-caption]')!;
+        const date = viewer.querySelector<HTMLElement>('[data-gallery-date]')!;
+        const error = viewer.querySelector<HTMLElement>('[data-gallery-error]')!;
+        const original = viewer.querySelector<HTMLAnchorElement>('[data-gallery-original]')!;
+        const previous = viewer.querySelector<HTMLButtonElement>('[data-gallery-previous]')!;
+        const next = viewer.querySelector<HTMLButtonElement>('[data-gallery-next]')!;
+        previous.hidden = next.hidden = links.length === 1;
+        let current = 0;
+        let previousOverflow = '';
+        let trigger: HTMLAnchorElement | undefined;
+        function show(index: number) {
+          current = (index + links.length) % links.length;
+          const link = links[current];
+          image.alt = link.dataset.alt || '';
+          image.width = Number(link.dataset.width);
+          image.height = Number(link.dataset.height);
+          image.hidden = false;
+          error.hidden = true;
+          image.src = link.href;
+          original.href = link.href;
+          caption.textContent = link.dataset.caption || '';
+          caption.hidden = !caption.textContent;
+          const taken = link.dataset.date;
+          date.textContent = taken ? new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${taken}T12:00:00Z`)) : '';
+          date.hidden = !taken;
+          position.textContent = `Photo ${current + 1} of ${links.length}`;
+        }
+        image.addEventListener('error', () => { image.hidden = true; error.hidden = false; });
+        links.forEach((link, index) => link.addEventListener('click', event => {
+          if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          trigger = link;
+          previousOverflow = document.body.style.overflow;
+          show(index);
+          viewer.showModal();
+          document.body.style.overflow = 'hidden';
+        }));
+        viewer.querySelector('[data-gallery-close]')!.addEventListener('click', () => viewer.close());
+        previous.addEventListener('click', () => show(current - 1));
+        next.addEventListener('click', () => show(current + 1));
+        viewer.addEventListener('keydown', event => {
+          if (event.key === 'ArrowLeft') { event.preventDefault(); show(current - 1); }
+          if (event.key === 'ArrowRight') { event.preventDefault(); show(current + 1); }
+        });
+        viewer.addEventListener('click', event => { if (event.target === viewer) viewer.close(); });
+        viewer.addEventListener('close', () => {
+          document.body.style.overflow = previousOverflow;
+          image.removeAttribute('src');
+          trigger?.focus();
+        });
+      }
+    </script>
+  </body>
+</html>
