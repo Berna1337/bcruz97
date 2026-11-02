@@ -5,8 +5,8 @@ description: A domain for email turned into a personal blog. Here’s the stack
 category: Development
 pubDate: 2026-11-02
 draft: false
-heroImage: /images/how-i-built-this-blog.png
-heroImageAlt: A brushed-silver browser window with layered pages and code brackets, partially assembled against a black background.
+heroImage: /images/how-i-built-this-blog-cover.png
+heroImageAlt: How I built this blog, with a preview of bcruz97.com and the Astro, Pages CMS, GitHub, and Cloudflare logos in black and white.
 ---
 I originally bought this domain for a more fancy email setup. With the domain sorted, I figured I could finally put another idea into practice: the blog I’d been meaning to start for a long time.
 
