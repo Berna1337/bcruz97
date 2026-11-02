@@ -1,11 +1,12 @@
 ---
 title: How I built this blog
-description: A domain for email turned into a personal blog. Here’s the stack and publishing workflow behind it.
-pubDate: 2026-11-02
+description: A domain for email turned into a personal blog. Here’s the stack
+  and publishing workflow behind it.
 category: Development
+pubDate: 2026-11-02
 draft: true
 ---
-I originally bought this domain for a more privacy-focused email setup. With the domain sorted, I figured I could finally put another idea into practice: the blog I’d been meaning to start for a long time.
+I originally bought this domain for a more fancy email setup. With the domain sorted, I figured I could finally put another idea into practice: the blog I’d been meaning to start for a long time.
 
 That meant building the site and figuring out a way to write and publish posts that I’d be happy to keep using.
 
