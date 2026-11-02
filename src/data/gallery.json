@@ -1,3 +1,10 @@
 {
-  "photos": []
+  "photos": [
+    {
+      "image": "/gallery/dcf79c71-b979-4fc9-ab5b-feb4c0521f24.jpeg",
+      "alt": "Test",
+      "date": "2026-11-02",
+      "draft": true
+    }
+  ]
 }
