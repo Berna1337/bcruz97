@@ -4,7 +4,7 @@ description: A domain for email turned into a personal blog. Here’s the stack
   and publishing workflow behind it.
 category: Development
 pubDate: 2026-11-02
-draft: true
+draft: false
 ---
 I originally bought this domain for a more fancy email setup. With the domain sorted, I figured I could finally put another idea into practice: the blog I’d been meaning to start for a long time.
 
@@ -81,7 +81,7 @@ GitHub Actions also checks changes by building both versions of the site and ver
 
 That gives me a place to check both writing and code changes before they reach the live site. It also means I can go through the publishing process from my phone, while still having the repository and local tools available when I want to work on the site itself.
 
-The blog itself is still a work in progress. This is what I’ve put together with help from Codex so far, and there’s plenty of room for it to grow. I’ll keep improving it as I use it and get a better feel for what I want from it.
+The project itself still has a lot of room to grow. This is what I’ve put together with help from Codex so far, I’ll keep improving it as I use it and get a better feel for what I want from it.
 
 The [source code is public on GitHub](https://github.com/Berna1337/bcruz97) if you want to look through the site and its workflows.
 
