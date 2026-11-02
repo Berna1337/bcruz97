@@ -3,7 +3,8 @@ import { join } from 'node:path';
 import sharp from 'sharp';
 import { fileURLToPath } from 'node:url';
 import { imageVariants } from './image-variants.mjs';
-import { parseGallery, visiblePhotos } from '../src/lib/gallery-data.mjs';
+import { loadGallerySources } from './gallery-sources.mjs';
+import { parseGalleryDocument, visiblePhotos } from '../src/lib/gallery-data.mjs';
 const root = fileURLToPath(new URL('../public/', import.meta.url));
 export async function prepareMedia({ includeDrafts = true } = {}) {
   const manifest = {};
@@ -24,11 +25,10 @@ export async function prepareMedia({ includeDrafts = true } = {}) {
     }
   }
   await walk(root);
-  const photos = parseGallery(JSON.parse(await readFile(new URL('../src/data/gallery.json', import.meta.url), 'utf8')));
-  for (const photo of visiblePhotos(photos, includeDrafts)) {
+  const photos = parseGalleryDocument(await readFile(new URL('../src/data/gallery.json', import.meta.url), 'utf8'));
+  const directory = fileURLToPath(new URL('../src/assets/gallery/', import.meta.url));
+  for await (const { photo, buffer } of loadGallerySources(visiblePhotos(photos, includeDrafts), directory)) {
     if (manifest[photo.image]) continue;
-    const source = new URL('../src/assets/gallery/', import.meta.url);
-    const buffer = await readFile(join(fileURLToPath(source), photo.image.slice('/gallery/'.length)));
     if (((await sharp(buffer).metadata()).pages || 1) > 1) throw new Error(`Gallery photo ${photo.image} is animated. Upload a still photo instead.`);
     manifest[photo.image] = await imageVariants(buffer, output, { widths: [480, 960, 1600, 2400], maxHeight: 2400 });
   }

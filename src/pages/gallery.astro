@@ -3,16 +3,18 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import gallery from '../data/gallery.json';
+import gallerySource from '../data/gallery.json?raw';
 import media from '../generated/media.json';
-import { parseGallery, visiblePhotos } from '../lib/gallery-data.mjs';
+import { parseGalleryDocument, visiblePhotos } from '../lib/gallery-data.mjs';
 const preview = import.meta.env.PUBLIC_BLOG_PREVIEW === 'true';
 type Variant = { src: string; width: number; height: number };
-const photos = visiblePhotos(parseGallery(gallery), preview).map(photo => {
+const entries = visiblePhotos(parseGalleryDocument(gallerySource), preview);
+const missingPhotos = entries.filter(photo => !(media as Record<string, Variant[]>)[photo.image]?.length);
+const photos = entries.flatMap(photo => {
   const variants = (media as Record<string, Variant[]>)[photo.image];
-  if (!variants?.length) throw new Error(`Gallery photo was not processed: ${photo.image}. Run npm run build or npm run dev.`);
+  if (!variants?.length) return [];
   const thumbnail = variants.find(image => image.width >= 960) || variants[variants.length - 1];
-  return { ...photo, thumbnail, full: variants[variants.length - 1], srcset: variants.map(image => `${image.src} ${image.width}w`).join(', ') };
+  return [{ ...photo, thumbnail, full: variants[variants.length - 1], srcset: variants.map(image => `${image.src} ${image.width}w`).join(', ') }];
 });
 ---
 <!doctype html>
@@ -22,6 +24,11 @@ const photos = visiblePhotos(parseGallery(gallery), preview).map(photo => {
     <Header />
     <main id="main" class="wrap gallery-page">
       <div class="gallery-intro"><h1>Gallery.</h1><p>Photos I felt like sharing.</p></div>
+      {preview && missingPhotos.length > 0 && <aside class="gallery-warning" role="status">
+        <h2>Some photos are missing</h2>
+        <p>Re-upload these files in Media → Gallery photos, or remove their entries in Gallery. They have been left out of this preview.</p>
+        <ul>{missingPhotos.map(photo => <li>{photo.image.slice('/gallery/'.length)}</li>)}</ul>
+      </aside>}
       <div class="gallery-heading mono"><span>{photos.length} {photos.length === 1 ? 'photo' : 'photos'}</span>{photos.length > 0 && <span>Open a photo for a closer look</span>}</div>
       {photos.length === 0 ? <p class="empty-state gallery-empty">No photos yet. Check back soon.</p> : <div class="gallery-grid" data-gallery>
         {photos.map(photo => <figure class="gallery-photo">

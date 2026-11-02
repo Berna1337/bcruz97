@@ -40,7 +40,7 @@ content:
           collapsible:
             collapsed: true
             summary: "{index}. {fields.alt}"
-        description: Add photos and drag them into the order you want. Draft photos only appear in the private preview. Remove location metadata before uploading; the source repository is public.
+        description: Add photos and drag them into the order you want. Remove an entry here when deleting its photo file. Draft photos only appear in the private preview. Remove location metadata before uploading; the source repository is public.
         fields:
           - name: image
             label: Photo

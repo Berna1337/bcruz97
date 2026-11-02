@@ -10,6 +10,18 @@ const photo = z.object({
 export function parseGallery(value) {
   return z.object({ photos: z.preprocess(value => value == null ? [] : value, z.array(photo)) }).parse(value).photos;
 }
+// Pages CMS can save an entirely blank file after the last photo is removed.
+export function parseGalleryDocument(source) {
+  const text = source.trim();
+  if (!text) return [];
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch (cause) {
+    throw new Error('src/data/gallery.json contains invalid JSON. Fix the file or save the Gallery again in Pages CMS.', { cause });
+  }
+  return parseGallery(data ?? {});
+}
 export function visiblePhotos(photos, includeDrafts = false) {
   return photos.filter(photo => includeDrafts === true || !photo.draft);
 }

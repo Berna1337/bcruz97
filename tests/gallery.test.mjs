@@ -4,7 +4,7 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import sharp from 'sharp';
-import { parseGallery, visiblePhotos } from '../src/lib/gallery-data.mjs';
+import { parseGallery, parseGalleryDocument, visiblePhotos } from '../src/lib/gallery-data.mjs';
 import { imageVariants } from '../scripts/image-variants.mjs';
 
 test('gallery preserves editor order, defaults to draft and filters production photos', () => {
@@ -57,4 +57,41 @@ test('gallery re-encoding removes embedded metadata and keeps full portrait prop
     assert.equal(rotatedMetadata.exif, undefined);
     assert.ok((await sharp(original).metadata()).exif, 'source should remain unchanged');
   } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+test('a deleted upload is omitted with an actionable warning, while valid photos remain', async () => {
+  const { loadGallerySources } = await import('../scripts/gallery-sources.mjs');
+  const { writeFile, mkdir } = await import('node:fs/promises');
+  const directory = await mkdtemp(join(tmpdir(), 'bcruz-gallery-missing-'));
+  try {
+    await writeFile(join(directory, 'kept.jpg'), 'existing photo');
+    const photos = parseGallery({ photos: [
+      { image: '/gallery/deleted.jpg', alt: 'Deleted photo' },
+      { image: '/gallery/kept.jpg', alt: 'Existing photo', draft: false },
+    ] });
+    const warnings = [];
+    const sources = [];
+    for await (const source of loadGallerySources(photos, directory, message => warnings.push(message))) sources.push(source);
+    assert.deepEqual(sources.map(source => source.photo.alt), ['Existing photo']);
+    assert.equal(sources[0].buffer.toString(), 'existing photo');
+    assert.equal(warnings.length, 1);
+    assert.match(warnings[0], /deleted\.jpg/);
+    assert.match(warnings[0], /Re-upload/);
+    await mkdir(join(directory, 'invalid.jpg'));
+    await assert.rejects(async () => {
+      for await (const source of loadGallerySources([{ image: '/gallery/invalid.jpg' }], directory)) void source;
+    }, { code: 'EISDIR' });
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+
+test('an empty Pages CMS gallery file is valid, but malformed JSON still fails', () => {
+  for (const source of ['', ' \n\t', '\uFEFF\n', '{}', 'null', '{"photos":[]}', '{"photos":null}']) {
+    assert.deepEqual(parseGalleryDocument(source), []);
+  }
+  const photos = parseGalleryDocument(JSON.stringify({ photos: [{ image: '/gallery/photo.jpg', alt: 'A real photo', draft: false }] }));
+  assert.equal(photos.length, 1);
+  assert.equal(photos[0].draft, false);
+  assert.throws(() => parseGalleryDocument('{"photos": ['), /gallery.json contains invalid JSON/);
+  assert.throws(() => parseGalleryDocument('{"photos":"not a list"}'));
 });
