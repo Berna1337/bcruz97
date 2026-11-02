@@ -1,21 +1,21 @@
 ---
 title: How I built this blog
-description: From a logo and a rough idea to a blog I can write, preview, and publish from my phone.
+description: A domain for email turned into a personal blog. Here’s the stack and publishing workflow behind it.
 pubDate: 2026-11-02
 category: Development
 draft: true
 ---
-In my [first post](/blog/hello-internet/), I talked about wanting somewhere to put the things I feel like sharing. Getting that place built turned into its own little project, so it seems like a reasonable thing to write about next.
+This started with email. I wanted a more privacy-focused email setup, and I bought a domain to use with it. Once I had the domain, I remembered something I’d wanted to do for a long time: start a blog.
 
-The starting point was simple: I had a logo, a domain, and an idea of what I wanted. A personal site, with a blog, that felt like mine. I also wanted to be able to actually use it without turning every post into a development task.
+I already had somewhere to put it. I just needed to build the site and work out how I’d write and publish posts.
 
-I built it with help from Codex. A lot of the process was me looking at what we had, deciding what didn’t feel right, and asking for changes. The first design felt too much like a template. Keeping the header and footer while reworking the rest got it closer to what I had in mind.
+The requirements were fairly straightforward. I wanted a simple site that worked well on a phone, content I could keep in files, and a way to review changes before publishing. I also wanted to write from my phone without needing a terminal or a local development environment.
 
-## Keeping the site simple
+Here’s how the pieces fit together.
 
-The blog is built with [Astro](https://astro.build/). Posts live in the repository as Markdown files, with a small block of information at the top for the title, description, date, category, and draft status.
+## Astro and Markdown
 
-A post starts roughly like this:
+The site is built with [Astro](https://astro.build/). Each post is a Markdown file in the repository, with frontmatter for its title, description, date, category, and draft status:
 
 ```yaml
 ---
@@ -27,61 +27,57 @@ draft: true
 ---
 ```
 
-The writing goes underneath. Astro uses those files to build the home page, the blog list, and the individual articles. The public pages are generated ahead of time, and the content doesn’t need a database.
+The writing goes underneath. Astro reads the posts and generates the home page, blog list, and individual articles during the build. The public pages are generated ahead of time, so serving an article doesn’t require fetching its content from a database.
 
-That also means the writing stays in a format I can open in a text editor. Changes have Git history, and the site’s layout can change without having to rewrite the posts.
+For this kind of site, that felt like a good fit. The content is mostly text and media, and it only changes when I publish something. Keeping posts in Markdown also means I can edit them outside the CMS, track changes with Git, and change the site’s layout without moving the writing into a different system.
 
-For the design, I kept coming back to the logo. It already had the greys and black I liked, so those became the basis for the site. There are light and dark modes, with a proper black background in dark mode. Mostly, I wanted the writing to be comfortable to read on both a computer and a phone.
+## An editor I can use from my phone
 
-## Writing without opening a terminal
+Working directly with Markdown is fine at my desk. On my phone, I wanted an editor with fields and an upload button.
 
-Markdown files are fine when I’m at my desk. On my phone, I’d rather have an editor with fields and an upload button.
+[Pages CMS](https://pagescms.org/docs/) provides that interface over the GitHub repository. Its `.pages.yml` configuration defines the post fields, category collection, and media upload locations. When I save something in the editor, the change is committed back to GitHub.
 
-That’s where [Pages CMS](https://pagescms.org/docs/) comes in. It gives me an interface for editing the files in GitHub. A `.pages.yml` file defines the post fields, the categories, and where uploaded media belongs. Saving a post saves a change back to the repository.
+The content stays in the same files whether I edit it locally or through the CMS. There’s no separate copy of a post to keep in sync.
 
-I can choose a thumbnail, add images within the writing, and put audio or short video clips between paragraphs. Standalone YouTube links become embedded players when the blog is built. Reading time is calculated automatically.
+Categories live in their own collection, so I can create a category once and select it for related posts. On the blog, those categories become filters that work alongside text search.
 
-Local photos also get smaller WebP versions during the build. The page gives the browser a choice of sizes, so a small thumbnail doesn’t need to load the full original photo. The uploaded original stays unchanged.
+## Handling media during the build
 
-Categories have their own little collection in the CMS. I can add one there and reuse it across posts. Readers can then filter the blog without me having to commit the whole site to a single subject.
+The editor lets me choose a thumbnail and insert images into the writing. Local photos get smaller WebP versions during the build, and the generated pages provide several sizes for the browser to choose from. That avoids loading a full-size photo just to display a small thumbnail, while keeping the uploaded original unchanged.
 
-## A preview I can actually check
+Audio and short video clips can appear between paragraphs too. A standalone link to a supported file becomes a player with controls. YouTube links work in a similar way, becoming embedded videos when the post is built.
 
-One thing I wanted early on was a way to see an unfinished post in the real layout.
+These transformations happen automatically, so writing a post doesn’t require putting together the same player markup each time. Reading time is calculated from the text as well.
 
-We first made a dedicated draft area inside the site. After working through the publishing flow, we replaced that with a separate preview site. It looks like the blog, but includes drafts alongside published posts, with labels to make the difference clear.
+## Separating preview from production
 
-There are two branches involved:
+I wanted to check unfinished posts in the actual site layout before publishing them. The repository uses two branches:
 
-- `preview` is where I write and check changes.
-- `main` is what gets published to the live site.
+- `preview` is where I write and review changes.
+- `main` contains what gets deployed to the live site.
 
-GitHub Actions builds and deploys the `preview` branch to a separate Cloudflare Worker. That Worker checks for a signed login cookie before serving pages or uploaded files. If the password hasn’t been configured, it refuses access.
+A GitHub Actions workflow builds the `preview` branch and deploys it to a separate Cloudflare Worker. That build includes both drafts and published posts, with their status labelled on the page.
 
-There’s an important distinction here: the preview site is password-protected, but [the repository is public](https://github.com/Berna1337/bcruz97). Draft text committed there can still be read on GitHub. This setup is useful for reviewing unfinished writing; it isn’t a place to store confidential material.
+The preview Worker checks for a signed login cookie before serving any page or uploaded file. It refuses access if the password hasn’t been configured. Preview responses are also marked not to be cached or indexed.
 
-## From a saved draft to a published post
+The public build excludes drafts from article routes, post lists, and RSS. That check is independent of the branch: merging a draft’s file into `main` doesn’t publish the article while Draft is still enabled.
 
-The workflow I ended up with is:
+The preview password protects the website, but [the repository itself is public](https://github.com/Berna1337/bcruz97). Anyone can read draft files committed there. I use the preview to review how unfinished posts look, and keep confidential information out of the repository.
+
+## Publishing a post
+
+The writing workflow is:
 
 1. Open Pages CMS on the `preview` branch.
-2. Write or edit a post and save it.
-3. Wait for the preview deployment, then check it in the browser.
-4. Turn off Draft when the post is ready.
-5. Open a pull request from `preview` to `main`, review it, and merge.
+2. Write or edit a post, then save it.
+3. Wait for the GitHub Actions deployment and check the preview site.
+4. Turn off Draft when the post is ready, save, and review it again.
+5. Open a pull request from `preview` to `main`, then merge it.
 
-Cloudflare’s Git integration handles the production deployment after the merge. The live site is hosted on [Cloudflare Workers with static assets](https://developers.cloudflare.com/workers/static-assets/), using my own domain.
+Cloudflare’s Git integration builds and deploys `main` after the merge. The live site runs on [Cloudflare Workers with static assets](https://developers.cloudflare.com/workers/static-assets/), using my domain.
 
-Posts that still have Draft enabled stay out of the public post lists, article routes, and RSS feed, even if their files have been merged into `main`.
+GitHub Actions also checks changes by building both versions of the site and verifying that draft article pages stay out of the production build. Preview deployments have their own workflow; Cloudflare’s Git integration handles production.
 
-## The bits that needed sorting out
+That gives me a place to check both writing and code changes before they reach the live site. It also means I can go through the publishing process from my phone, while still having the repository and local tools available when I want to work on the site itself.
 
-It wasn’t all a straight line from idea to working blog.
-
-The category picker needed an adjustment to read the saved category names correctly. The workflow that opens publishing pull requests also needed a GitHub repository setting enabled before it was allowed to create them.
-
-Then there were two systems trying to handle preview builds: our GitHub Action and Cloudflare’s own branch preview integration. The extra Cloudflare build was failing on a command we weren’t using for our separate preview Worker. That took some untangling, including learning that an old failed check can remain attached to a commit when you open another pull request for it.
-
-Those were useful reminders that the editor, repository, build, and deployment are separate pieces. A successful build doesn’t necessarily mean a successful deployment, and a saved post doesn’t appear on the site until the deployment has finished.
-
-I’ll probably keep adjusting things as I use it. For now, I have somewhere to write, a way to check how it looks, and a publishing flow I can use from my phone. Time to put it to use.
+What began as a domain for email now has a blog attached to it. The next part is finding out how well this setup holds up as I keep writing.
