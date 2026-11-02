@@ -7,7 +7,7 @@ export function imageAttributes(source: string, thumbnail = false) {
   return {
     src: chosen.src,
     srcset: variants.map(item => `${item.src} ${item.width}w`).join(', '),
-    sizes: thumbnail ? '(max-width: 740px) 80px, 104px' : '(max-width: 720px) calc(100vw - 40px), 680px',
+    sizes: thumbnail ? '(max-width: 740px) 112px, (max-width: 1050px) 160px, 192px' : '(max-width: 720px) calc(100vw - 40px), 680px',
     width: chosen.width, height: chosen.height,
   };
 }

@@ -34,6 +34,24 @@ The preview Worker uses Workers Free allowances if your account is on Free. Pass
 
 The repository remains public: draft Markdown and uploaded originals committed to GitHub are publicly readable there. Preview protection does not make Git history private. Files merged into production's `public/` directory also get public URLs.
 
+## Automatic checks on publishing pull requests
+
+Saving on `preview` already starts the push checks and preview deployment automatically. GitHub requires a maintainer to approve the additional PR workflow when the publishing action opens a pull request using its built-in `GITHUB_TOKEN`.
+
+To let checks on future publishing pull requests start automatically:
+
+1. In GitHub account settings, open **Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
+2. Name it `bcruz97 publishing`, select your account as resource owner, and choose **Only select repositories → bcruz97**.
+3. Set repository permissions to **Contents: Read-only** and **Pull requests: Read and write**. Metadata read access is included automatically. No Actions, Workflows, or Administration write permissions are needed.
+4. Choose an expiration and generate the token.
+5. In the repository's **Settings → Secrets and variables → Actions**, add the token as the repository secret **`PUBLISH_PR_TOKEN`**.
+
+The publishing workflow uses that token only to find or open the `preview` → `main` pull request. It keeps the existing branch restriction, never approves workflows or PRs, and never merges. New PRs are opened under the token owner's account and their checks can start automatically. Without this secret, the workflow falls back to the built-in token and GitHub's approval prompt still applies. Replace the secret when the token expires.
+
+An already pending workflow still needs its existing approval; adding the secret does not retroactively release that run or change the author of an existing PR. For this setup change, review the workflow edit, approve the current run if requested, and merge it before using the updated publishing action.
+
+See [GitHub's workflow-trigger documentation](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow#triggering-a-workflow-from-a-workflow).
+
 ## Categories
 
 Choose a category from the post's **Category** field. To add a new one, open **Categories** in Pages CMS, create an entry, and save; it becomes available to other posts. This keeps names consistent without fixing the blog to a set of topics. Leave the field blank if no category fits.
