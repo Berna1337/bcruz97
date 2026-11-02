@@ -11,7 +11,7 @@ That meant building the site and figuring out a way to write and publish posts t
 
 The requirements were fairly straightforward. I wanted a simple site that worked well on a phone, content I could keep in files, and a way to review changes before publishing. I also wanted to write from my phone without needing a terminal or a local development environment.
 
-The [source code is public on GitHub](https://github.com/Berna1337/bcruz97) if you want to look through the site and its workflows. Here’s how the pieces fit together.
+Here’s how the pieces fit together.
 
 ## Astro and Markdown
 
@@ -79,5 +79,7 @@ Cloudflare’s Git integration builds and deploys `main` after the merge. The li
 GitHub Actions also checks changes by building both versions of the site and verifying that draft article pages stay out of the production build. Preview deployments have their own workflow; Cloudflare’s Git integration handles production.
 
 That gives me a place to check both writing and code changes before they reach the live site. It also means I can go through the publishing process from my phone, while still having the repository and local tools available when I want to work on the site itself.
+
+The [source code is public on GitHub](https://github.com/Berna1337/bcruz97) if you want to look through the site and its workflows.
 
 What began as a domain for email now has a blog attached to it. The next part is finding out how well this setup holds up as I keep writing.
