@@ -63,7 +63,7 @@ The preview Worker checks for a signed login cookie before serving any page or u
 
 The public build excludes drafts from article routes, post lists, and RSS. That check is independent of the branch: merging a draft’s file into `main` doesn’t publish the article while Draft is still enabled.
 
-The preview password protects the website, but the repository itself is public. Anyone can read draft files committed there. I use the preview to review how unfinished posts look, and keep confidential information out of the repository.
+The preview password protects the website, but the repository itself is public. Anyone can read draft files committed there. I use the preview to review how unfinished posts look.
 
 ## Publishing a post
 
