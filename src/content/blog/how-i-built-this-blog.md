@@ -80,6 +80,8 @@ GitHub Actions also checks changes by building both versions of the site and ver
 
 That gives me a place to check both writing and code changes before they reach the live site. It also means I can go through the publishing process from my phone, while still having the repository and local tools available when I want to work on the site itself.
 
+The blog itself is still a work in progress. This is what I’ve put together with help from Codex so far, and there’s plenty of room for it to grow. I’ll keep improving it as I use it and get a better feel for what I want from it.
+
 The [source code is public on GitHub](https://github.com/Berna1337/bcruz97) if you want to look through the site and its workflows.
 
 What began as a domain for email now has a blog attached to it. The next part is finding out how well this setup holds up as I keep writing.
