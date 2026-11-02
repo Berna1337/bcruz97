@@ -5,13 +5,13 @@ pubDate: 2026-11-02
 category: Development
 draft: true
 ---
-This started with email. I wanted a more privacy-focused email setup, and I bought a domain to use with it. Once I had the domain, I remembered something I’d wanted to do for a long time: start a blog.
+I originally bought this domain for a more privacy-focused email setup. With the domain sorted, I figured I could finally put another idea into practice: the blog I’d been meaning to start for a long time.
 
-I already had somewhere to put it. I just needed to build the site and work out how I’d write and publish posts.
+That meant building the site and figuring out a way to write and publish posts that I’d be happy to keep using.
 
 The requirements were fairly straightforward. I wanted a simple site that worked well on a phone, content I could keep in files, and a way to review changes before publishing. I also wanted to write from my phone without needing a terminal or a local development environment.
 
-Here’s how the pieces fit together.
+The [source code is public on GitHub](https://github.com/Berna1337/bcruz97) if you want to look through the site and its workflows. Here’s how the pieces fit together.
 
 ## Astro and Markdown
 
@@ -62,7 +62,7 @@ The preview Worker checks for a signed login cookie before serving any page or u
 
 The public build excludes drafts from article routes, post lists, and RSS. That check is independent of the branch: merging a draft’s file into `main` doesn’t publish the article while Draft is still enabled.
 
-The preview password protects the website, but [the repository itself is public](https://github.com/Berna1337/bcruz97). Anyone can read draft files committed there. I use the preview to review how unfinished posts look, and keep confidential information out of the repository.
+The preview password protects the website, but the repository itself is public. Anyone can read draft files committed there. I use the preview to review how unfinished posts look, and keep confidential information out of the repository.
 
 ## Publishing a post
 
