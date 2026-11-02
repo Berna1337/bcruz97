@@ -58,6 +58,22 @@ Choose a category from the post's **Category** field. To add a new one, open **C
 
 Published categories appear as filters on the Blog page and links on articles. Search and category filters work together. A filtered URL such as `/blog/?category=Gaming` can be shared. Draft-only categories appear only on the private preview.
 
+## Gallery
+
+Open **Gallery** in Pages CMS to add photos, reorder them by dragging, and edit optional captions and dates. Every photo needs a description for screen readers. New entries default to **Draft**: review them on the preview branch, turn Draft off when ready, then use the normal publishing PR flow. The website displays photos in the order saved in the editor.
+
+Uploads use the **Gallery photos** media source. JPEG, PNG, WebP and AVIF still images are supported. Convert HEIC photos to one of these formats before uploading. Choose a photo in the Gallery editor; uploading a file alone does not add it to the page.
+
+Deleting a file in **Media → Gallery photos** does not automatically delete its entry under **Gallery**. Remove the entry too, or re-upload/select another photo. Missing files are omitted with a build warning and a notice in the private preview, so a stale reference does not stop the rest of the site from deploying.
+
+The `/gallery/` page shows a responsive grid. Tap a photo for a larger view, use Previous/Next or the keyboard arrows, and press Escape or Close to return. Photos retain their proportions; portrait photos are not cropped into landscape. Without JavaScript, photo links still open the processed full-size image. There are no external photo services or third-party viewer scripts.
+
+Original gallery images live in `src/assets/gallery`, outside `public/`. Builds publish resized WebP copies (up to 2400 pixels on either side), re-encoded without EXIF/GPS, XMP or IPTC metadata. Unpublished gallery photos are not processed into the production asset bundle. Removing an entry also removes its generated copies on the next fresh build, unless another entry still uses that image. The image file can remain in the media library for later reuse.
+
+**The GitHub repository is public.** Original uploads and earlier revisions remain readable there, including embedded metadata. Strip sensitive metadata before uploading; the build only strips metadata from the copies served by the website. Draft status and preview passwords do not protect files committed to GitHub. Do not upload photos you need to keep private.
+
+Locally, run `npm run dev` or a build again after adding/replacing source photos so the image manifest is regenerated. Gallery content is stored in `src/data/gallery.json`; an empty list or a blank file saved by Pages CMS shows the site's empty state rather than sample photos.
+
 ## Images and thumbnails
 
 Use **Post thumbnail** and **Thumbnail description** for the post header and list image. Use the body editor's image button to put images anywhere in the writing.
