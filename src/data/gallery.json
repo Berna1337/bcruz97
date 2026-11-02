@@ -1,26 +1,38 @@
 {
   "photos": [
     {
-      "image": "/gallery/img5712.jpeg",
-      "alt": "night-balcony",
-      "date": "2026-11-02",
-      "draft": true
-    },
-    {
       "image": "/gallery/img5450.jpeg",
       "alt": "beach-sintra",
       "date": "2026-11-02",
       "draft": true
     },
     {
-      "image": "/gallery/img5237.jpeg",
-      "alt": "lisbon-statue",
+      "image": "/gallery/img5453.jpeg",
+      "alt": "sunset",
+      "date": "2026-11-02",
+      "draft": true
+    },
+    {
+      "image": "/gallery/img2198.jpeg",
+      "alt": "sunset-porto",
       "date": "2026-11-02",
       "draft": true
     },
     {
       "image": "/gallery/img4703.jpeg",
       "alt": "airplane-clouds",
+      "date": "2026-11-02",
+      "draft": true
+    },
+    {
+      "image": "/gallery/img5712.jpeg",
+      "alt": "night-balcony",
+      "date": "2026-11-02",
+      "draft": true
+    },
+    {
+      "image": "/gallery/img5237.jpeg",
+      "alt": "lisbon-statue",
       "date": "2026-11-02",
       "draft": true
     }
