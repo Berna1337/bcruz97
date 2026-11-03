@@ -4,9 +4,11 @@ description: A domain for email turned into a personal blog. Here’s the stack
   and publishing workflow behind it.
 category: Development
 pubDate: 2026-11-02
-draft: false
 heroImage: /images/how-i-built-this-blog-cover-color.png
-heroImageAlt: How I built this blog, with a preview of bcruz97.com, colored browser buttons, and the Astro, Pages CMS, GitHub, and Cloudflare logos in their brand colors.
+heroImageAlt: How I built this blog, with a preview of bcruz97.com, colored
+  browser buttons, and the Astro, Pages CMS, GitHub, and Cloudflare logos in
+  their brand colors.
+draft: false
 ---
 I originally bought this domain for a more fancy email setup. With the domain sorted, I figured I could finally put another idea into practice: the blog I’d been meaning to start for a long time.
 
@@ -87,4 +89,4 @@ The project itself still has a lot of room to grow. This is what I’ve put toge
 
 The [source code is public on GitHub](https://github.com/Berna1337/bcruz97) if you want to look through the site and its workflows.
 
-What began as a domain for email now has a blog attached to it. The next part is finding out how well this setup holds up as I keep writing.
+And now I have this side project that I’ve always wanted to try, expect more posts soon!
